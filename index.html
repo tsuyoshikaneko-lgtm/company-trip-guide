@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026年 社員旅行のしおり in 佐原</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="notebook-wrapper">
+    <!-- Floating character pinned to bottom corner -->
+    <a href="https://app.slack.com/client/T02PVSVJR6J/C06RS5YQL3C" target="_blank" class="floating-bear" id="mascot"
+      style="text-decoration: none; cursor: pointer;">
+      <img src="img/bear_puppet_latest.png" alt="くまさん" class="bear-img wiggling">
+      <div class="speech-bubble" id="bear-message">
+        なんでも聞いてね！🐻💬
+      </div>
+    </a>
+
+    <!-- COVER -->
+    <header class="cover section">
+      <div class="tape tape-1"></div>
+      <div class="tape tape-2"></div>
+
+      <div class="badge wiggling">社員旅行 2026</div>
+      <h1 class="main-title">
+        <span class="title-sub">＼ ワクワク ／</span><br>
+        <span class="marker-highlight marker-yellow">旅のしおり</span><br>
+        <span class="title-place">in 佐原</span>
+      </h1>
+
+      <div class="hero-character reveal">
+        <div class="bear-illustration">
+          <img src="img/bear_puppet_latest.png" alt="くまさん" class="floating">
+        </div>
+        <div class="intro-speech">
+          <p><strong>みんな！やっほー！くまさんだよ！</strong></p>
+          <p>いよいよ社員旅行が近づいてきたね！<br>山には社員旅行は無いから、楽しみだよ！</p>
+          <p>ここでは、社員旅行の過ごし方について解説するからよーく聞いてね！</p>
+          <p class="small-text">（くまさんは行けないんだけどねw<br>社内政治は得意だけど、社員旅行はまだ自信がないんだ、、。）</p>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- SECTION 1: IMPORTANT -->
+    <section class="important-section section reveal" id="important-info">
+      <div class="tape tape-3"></div>
+
+      <h2 class="section-title">
+        <span class="icon">✨</span> <span class="marker-highlight marker-red">これだけ覚えて！</span>
+      </h2>
+      <p class="section-desc">忙しい人はここだけ読めばOKだよ！（僕もいきたいなー）</p>
+
+      <!-- Assembly Info -->
+      <div class="card highlight-card">
+        <h3><span class="icon">📍</span> 朝の集合</h3>
+        <div class="flex-column gap-15" style="margin-top: 15px;">
+          <div class="info-box">
+            <h4>🚅 東京駅から行く人</h4>
+            <div class="time-stamp wiggling">10:50 <span class="warning">※遅刻注意！</span></div>
+            <p><strong>東京駅バス乗り場</strong></p>
+            <a href="https://www.navitime.co.jp/maps/poi?id=00234759" target="_blank" class="btn btn-outline">地図を開く
+              🗺️</a>
+          </div>
+
+          <div class="info-box">
+            <h4>🚙 現地（佐原）に集まる人</h4>
+            <div class="time-stamp">12:40</div>
+            <p><strong>レストラン「ワーズワース」</strong></p>
+            <a href="https://tabelog.com/chiba/A1204/A120404/12031904/dtlmap/" target="_blank"
+              class="btn btn-outline">地図を開く 🗺️</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Guidelines -->
+      <div class="accordion-group">
+
+        <details class="custom-accordion">
+          <summary>🐾 過ごし方について</summary>
+          <div class="accordion-content">
+            <p><strong>特に必須はありません、まったり過ごしましょう！</strong></p>
+            <p style="margin-top: 10px;">しっかり遊びたい人向けにはアクティビティを用意しています。以下の日程表を見ていきたいところに応募しましょう！<br><span
+                class="tag tag-red">※任意オプションの欄を確認してね！</span></p>
+            <a href="#" class="btn btn-primary" style="margin-top: 15px;">申し込みフォーム📝</a>
+          </div>
+        </details>
+
+        <details class="custom-accordion">
+          <summary>🎒 持ち物チェック</summary>
+          <div class="accordion-content">
+            <ul class="checklist">
+              <li><input type="checkbox" checked disabled> <strong>みんなとほっこり過ごしたいという気持ち</strong> <span
+                  class="tag tag-red wiggling">必須！</span></li>
+              <li><input type="checkbox"> <span>普通の旅行に必要なもの</span></li>
+              <li><input type="checkbox"> <span>特に必要なものはありません</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="custom-accordion">
+          <summary>🚌 帰り方</summary>
+          <div class="accordion-content">
+            <p style="font-size: 1.1rem; font-weight: 900; color: var(--accent-red);">基本、いつきていつ帰ってもいいよ！</p>
+            <div class="info-box" style="margin-top: 10px; border-left: 4px solid var(--accent-blue);">
+              <p><strong>1日目で帰るおすすめ：</strong><br>佐原→東京（19:07発）</p>
+              <hr style="border: 0; border-top: 1px dashed #ccc; margin: 10px 0;">
+              <p><strong>2日目で帰るおすすめ：</strong><br>佐原→東京（17:42発 / 19:31着）</p>
+            </div>
+            <p style="margin-top: 15px;"><strong>すぐに帰りたくない人：</strong><br>好きなだけ飲んで帰ろう！さらしー！🍻</p>
+          </div>
+        </details>
+
+        <details class="custom-accordion" open>
+          <summary>🚨 困ったら</summary>
+          <div class="accordion-content emergency">
+            <p><strong>緊急連絡先：じゃみさん</strong></p>
+            <div class="fake-number">📞 090-XXXX-XXXX</div>
+          </div>
+        </details>
+
+      </div>
+
+      <div class="note-from-bear">
+        <div class="bear-avatar">
+          <img src="img/bear_puppet_latest.png" alt="くまさん">
+        </div>
+        <div>
+          <p><strong>遅刻だけ気をつければよさそうだね！</strong></p>
+          <p class="small-text" style="color: #666; margin-top: 5px;">
+            ここまでで必須のお知らせはおしまいだよ！次からは時間があるときに読んでみてね！<br>くまさんは暇だから解説を続けるよ！</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 2: ITINERARY -->
+    <section class="schedule-section section reveal" id="schedule">
+      <div class="tape tape-4"></div>
+
+      <h2 class="section-title"><span class="icon">📅</span> <span class="marker-highlight marker-blue">旅行日程表</span>
+      </h2>
+      <p class="section-desc">当日はどんなふうに過ごせばいいのかな？くまさん、教えて！</p>
+
+      <div class="card" style="border: 2px dashed var(--accent-blue); background: #f0f7ff;">
+        <p><strong>おっけー！日程表を公開するよ！</strong><br>
+          ただ、大切なことは「これは推奨日程」であって、必須の予定では無いんだ！</p>
+        <p style="font-size: 1.2rem; margin: 10px 0; color: var(--accent-red);"><strong>基本は気ままに過ごしてくれてOKだよ！</strong></p>
+        <p>「こう過ごすと楽しいかもね！」というオプションは用意しているから、興味ある人は<u>”手上げ”</u>してね！</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-target="day1">🌳 【1日目】</button>
+        <button class="tab-btn" data-target="day2">⛩️ 【2日目】</button>
+      </div>
+
+      <!-- DAY 1 -->
+      <div class="timeline" id="day1">
+
+        <div class="timeline-item">
+          <div class="time">10:55 ~ 12:28</div>
+          <div class="content card">
+            <span class="tag type-all">全員</span>
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🚌 バス移動</h4>
+            <p>東京駅 10:55発 → 佐原 12:28着<br>駅から市街地まで徒歩15分</p>
+            <p style="margin-top: 10px; color: var(--text-light);">🚶‍♂️ 駅からレストランまで移動(徒歩10分)</p>
+          </div>
+        </div>
+
+        <div class="timeline-item event-meal">
+          <div class="time">12:40 ~ </div>
+          <div class="content card">
+            <span class="tag type-all">予約済・全員で！！</span>
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🍝 昼ごはん</h4>
+            <p><a href="https://www.instagram.com/p/DPM2NmWEhwS/" target="_blank">ワーズワース（イタリアン）</a></p>
+            <p class="small-text">※ホテルに荷物を置けます</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">14:10 〜 17:00頃</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🚶 自由行動</h4>
+            <p>「<a href="https://sawara-inae.com/" target="_blank">いなえ</a>」を拠点として自由行動 (お部屋借りれそう)</p>
+            <div class="options-container">
+              <div class="option-box">
+                <span class="tag type-opt">任意オプション</span>
+                <p style="margin-top: 8px; font-weight: 900;">立澤さんといく佐原の街歩きガイド</p>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                  ・山車会館<br>
+                  ・伊能忠敬記念館<br>
+                  ・まちあるきガイド（1時間〜1.5時間）<br>
+                  <strong style="color: var(--accent-red);">※途中参加・途中離脱自由</strong>
+                </div>
+              </div>
+              <div class="option-box">
+                <span class="tag type-opt">任意オプション</span>
+                <p style="margin-top: 8px; font-weight: 900;">和菓子作り体験</p>
+                <p style="font-size: 0.85rem; color: var(--text-light);">（確認中）</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item event-hotel">
+          <div class="time">17:00 〜 17:15頃</div>
+          <div class="content card">
+            <span class="tag type-all">＠KAGURAに全員</span>
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🏨 チェックイン</h4>
+            <p><a href="https://www.nipponia-sawara.jp/stay" target="_blank">ホテル</a></p>
+          </div>
+        </div>
+
+        <div class="timeline-item event-meal">
+          <div class="time">17:30 〜</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🍲 夕ごはん</h4>
+            <p>ホテルで夕食</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">19:30 〜</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🌙 自由時間</h4>
+            <div class="options-container">
+              <div class="option-box"><span class="tag type-opt">任意</span> 佐原まち飲み 🍻</div>
+              <div class="option-box"><span class="tag type-opt">任意</span> 部屋でゆっくり 🍵</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DAY 2 -->
+      <div class="timeline hidden" id="day2">
+        <div class="timeline-item event-meal">
+          <div class="time">各自</div>
+          <div class="content card">
+            <span class="tag type-all">お部屋で準備</span>
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🍳 朝ごはん(お部屋)</h4>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">〜 12:00</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">⛩️ 香取神宮参詣</h4>
+            <p style="color: var(--text-light); margin-bottom: 10px;">🚕 タクシー相乗りで10分程度</p>
+            <div class="options-container">
+              <div class="option-box"><span class="tag type-opt">任意</span> 自由参加</div>
+              <div class="option-box"><span class="tag type-opt">任意</span> お部屋でゆっくり</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item event-hotel">
+          <div class="time">12:00</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">👜 チェックアウト</h4>
+            <p class="small-text">(荷物は預けられます)</p>
+          </div>
+        </div>
+
+        <div class="timeline-item event-meal">
+          <div class="time">12:00 〜 13:15</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🍜 昼ごはん</h4>
+            <p>お昼ご飯どころをピックアップして自由に選択</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">13:15 〜 16:00</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🛶 自由行動</h4>
+            <p>希望者はアクティビティを事前予約してね！</p>
+            <div class="options-container">
+              <div class="option-box">
+                <span class="tag type-opt">アクティビティ①</span>
+                <p style="margin-top: 8px; font-weight: 900;">発酵ドレッシング作り体験</p>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                  （45分）14:00-14:45<br>＠酵し処 和ぎ
+                </div>
+              </div>
+              <div class="option-box">
+                <span class="tag type-opt">アクティビティ②</span>
+                <p style="margin-top: 8px; font-weight: 900;">酒粕入浴剤づくり体験</p>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                  （15分）13:15-13:30<br>＠ホテルKAGURA
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">16:00 〜 17:00</div>
+          <div class="content card">
+            <span class="tag type-opt">自由参加</span>
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">☕️ 中締め・振り返り</h4>
+            <p>感想を共有！「<a href="https://sawara-inae.com/" target="_blank">いなえ</a>」をお借りします。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="time">17:00 〜</div>
+          <div class="content card">
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">👋 解散</h4>
+            <div class="info-box" style="margin-top: 10px;">
+              <p><strong>バス（佐原→東京）</strong><br>17:42発（19:31着）</p>
+              <hr style="border: 0; border-top: 1px dashed #ccc; margin: 10px 0;">
+              <p><strong>夕食食べて行く人</strong><br>19:07発（20:56着）</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 3: APPENDIX -->
+    <section class="appendix-section section reveal" id="appendix">
+      <div class="tape tape-1" style="background: rgba(56, 217, 169, 0.6);"></div>
+      <h2 class="section-title"><span class="icon">📖</span> <span
+          class="marker-highlight marker-yellow">Appendix</span></h2>
+      <p class="section-desc">せっかく行くからには、今回の旅行についてもっと色々知りたいなー</p>
+
+      <div class="card" style="margin-bottom: 30px; border: 2px dashed var(--accent-red); background: #fff0f0;">
+        <p><strong>そうだね！山には無いものがいっぱいだらか気になるよね！</strong><br>
+          ここに資料を集めたから、よかったらみてみてね！</p>
+      </div>
+
+      <!-- Polaroid Gallery Grid -->
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 40px;">
+        <div class="polaroid" data-caption="佐原の町並み" style="max-width: 250px;">
+          <img src="https://images.unsplash.com/photo-1590494056250-98319dc297d0?q=80&w=600&auto=format&fit=crop"
+            alt="River town placeholder">
+        </div>
+        <div class="polaroid" data-caption="おいしいごはん" style="max-width: 250px; transform: rotate(3deg);">
+          <img src="https://images.unsplash.com/photo-1544378730-8b510ed25bd7?q=80&w=600&auto=format&fit=crop"
+            alt="Food placeholder">
+        </div>
+      </div>
+
+      <h3 style="margin-bottom: 15px; font-weight: 900; font-size: 1.4rem;">📜 佐原の魅力を知るキーワード</h3>
+      <div class="appendix-cards">
+        <div class="app-card">
+          <div class="card-emoji">🛶</div>
+          <h3>生きている町並み</h3>
+          <p style="text-align: left; font-size: 0.9rem;">
+            関東で初めて「重要伝統的建造物群保存地区」に選定。江戸の商家がそのまま残るだけでなく、現在も家業を引き継いで営業を続けている店が多く、活きた歴史を感じられるのが最大の特徴です。</p>
+        </div>
+
+        <div class="app-card" style="transform: rotate(1deg);">
+          <div class="card-emoji" style="animation-delay: 1s;">🗺️</div>
+          <h3>伊能忠敬ゆかりの地</h3>
+          <p style="text-align: left; font-size: 0.9rem;">
+            日本地図を作った偉人、伊能忠敬が17歳から50歳までの約30年間を佐原で過ごしました。彼の旧宅や、国宝に指定された貴重な資料を展示する記念館は必見です。</p>
+        </div>
+
+        <div class="app-card" style="transform: rotate(-1deg);">
+          <div class="card-emoji" style="animation-delay: 2s;">🍶</div>
+          <h3>「発酵」のまち</h3>
+          <p style="text-align: left; font-size: 0.9rem;">
+            かつて利根川の水運を活かした酒や醤油の醸造が盛んでした。現在も歴史ある酒蔵（東薫酒造、馬場本店酒造）や醤油蔵が残り、発酵食品を楽しめます。</p>
+        </div>
+      </div>
+
+      <div class="spots-list">
+        <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 5px;">🏮 佐原の旅を彩るスポット・体験リスト</h3>
+        <p class="small-text">街歩きで立澤さんが紹介してくれそう！</p>
+
+        <div class="spot-links">
+          <a href="https://www.city.katori.lg.jp/sightseeing/machinami/shusei/funameguri.html" target="_blank"
+            class="spot-btn">🛶 小江戸さわら舟めぐり</a>
+          <a href="https://www.city.katori.lg.jp/sightseeing/machinami/shusei/tohashi.html" target="_blank"
+            class="spot-btn">🌉 樋橋（じゃあじゃあ橋）</a>
+          <a href="https://www.city.katori.lg.jp/sightseeing/it_museum/" target="_blank" class="spot-btn">🗺️
+            伊能忠敬記念館</a>
+          <a href="https://www.suigo-sawara.ne.jp/entry-info.html%3Fid%3D2557" target="_blank" class="spot-btn">🏛️
+            佐原町並み交流館</a>
+          <a href="https://www.tokun.co.jp/" target="_blank" class="spot-btn">🍶 東薫酒造（とうくん）</a>
+          <a href="https://babahonten.com/" target="_blank" class="spot-btn">🍶 馬場本店酒造</a>
+          <a href="https://www.city.katori.lg.jp/sightseeing/dashikaikan/" target="_blank" class="spot-btn">🎭
+            水郷佐原山車会館</a>
+        </div>
+      </div>
+
+    </section>
+
+    <footer class="site-footer">
+      <div class="wiggling" style="margin-bottom: 20px;">
+        <img src="img/bear_puppet_latest.png" alt="くまさん" style="width: 100px; mix-blend-mode: multiply;">
+      </div>
+      <p style="font-size: 1.2rem;">気をつけて行ってきてね！楽しんで！🐻</p>
+      <div class="footer-credit">© 2026 Company Trip Guide</div>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
