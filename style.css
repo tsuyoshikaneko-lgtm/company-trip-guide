@@ -24,6 +24,10 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Zen Maru Gothic', sans-serif;
   background-color: var(--bg-main);
@@ -229,6 +233,7 @@ a:hover {
   margin-bottom: 50px;
   box-shadow: var(--shadow-pop);
   position: relative;
+  z-index: 10;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -407,9 +412,14 @@ a:hover {
 }
 
 .bear-img {
-  width: 100px;
-  mix-blend-mode: multiply;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 50%;
+  background: #fff0f0;
+  border: 3px solid var(--text-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .speech-bubble {
@@ -421,7 +431,8 @@ a:hover {
   font-weight: 900;
   box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
   position: absolute;
-  top: -45px;
+  bottom: calc(100% + 12px);
+  right: 0;
   white-space: nowrap;
 }
 
@@ -429,7 +440,7 @@ a:hover {
   content: '';
   position: absolute;
   bottom: -6px;
-  right: 20px;
+  right: 25px;
   border-width: 6px 6px 0 6px;
   border-style: solid;
   border-color: var(--text-dark) transparent transparent transparent;
@@ -688,7 +699,7 @@ a:hover {
 /* Timeline */
 .timeline {
   position: relative;
-  padding-left: 15px;
+  padding-left: 20px;
   margin-left: 5px;
 }
 
@@ -717,14 +728,13 @@ a:hover {
   content: '';
   position: absolute;
   left: -23px;
-  /* Align with the dotted line */
   top: 5px;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   background: white;
   border-radius: 50%;
-  border: 4px solid var(--accent-blue);
-  box-shadow: 0 0 0 4px white;
+  border: 3px solid var(--accent-blue);
+  box-shadow: 0 0 0 3px white;
   z-index: 2;
 }
 
@@ -774,7 +784,7 @@ a:hover {
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 650px) {
   .notebook-wrapper {
     padding: 15px 15px 60px;
     background-position: 15px 0;
@@ -785,11 +795,120 @@ a:hover {
   }
 
   .section {
-    padding: 25px 20px;
+    padding: 25px 15px;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .title-place {
+    font-size: 1.6rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    gap: 6px;
+  }
+
+  .icon {
+    font-size: 1.6rem;
+  }
+
+  .fake-number {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+  }
+
+  .bear-illustration {
+    width: 150px;
+    height: 150px;
+  }
+
+  .intro-speech {
+    max-width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .note-from-bear {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
   }
 
   .polaroid {
     max-width: 200px !important;
+  }
+
+  .spot-links {
+    gap: 10px;
+  }
+
+  .spot-btn {
+    font-size: 0.85rem;
+    padding: 10px 15px;
+  }
+
+  .floating-bear {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .bear-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .speech-bubble {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+
+  .tabs {
+    gap: 5px;
+  }
+
+  .tab-btn {
+    font-size: 0.95rem;
+    padding: 10px 8px;
+  }
+
+  .time {
+    font-size: 1rem;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .highlight-card {
+    box-shadow: 3px 3px 0px var(--accent-yellow);
+  }
+
+  .info-box {
+    padding: 12px;
+  }
+
+  .time-stamp {
+    font-size: 1.2rem;
+  }
+
+  .spots-list {
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 370px) {
+  .main-title {
+    font-size: 1.7rem;
+  }
+
+  .title-place {
+    font-size: 1.3rem;
+  }
+
+  body {
+    border-left: 6px solid #e1d8c1;
   }
 }
 
@@ -940,4 +1059,64 @@ a:hover {
   font-size: 0.8rem;
   margin-top: 15px;
   opacity: 0.6;
+}
+
+/* Kuroko Animation */
+.kuroko-link {
+  position: absolute;
+  z-index: 5;
+  /* Below sections (10) */
+  pointer-events: none;
+  /* Ignore clicks when hidden */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+  opacity: 0;
+}
+
+.kuroko-img {
+  width: 120px;
+  /* Slightly larger so the face is easier to tap and see */
+  display: block;
+}
+
+/* Base hidden states */
+.kuroko-link.k-left {
+  transform: translate(40px, 20px) rotate(-65deg);
+}
+
+.kuroko-link.k-right {
+  transform: translate(-40px, 20px) rotate(65deg) scaleX(-1);
+}
+
+.kuroko-link.k-top {
+  transform: translate(0, 50px) rotate(0deg);
+}
+
+.kuroko-link.k-bottom {
+  transform: translate(0, -50px) rotate(180deg);
+}
+
+/* Peeking states */
+.kuroko-link.k-left.peek {
+  transform: translate(-65px, -30px) rotate(-65deg);
+  opacity: 1;
+  pointer-events: auto;
+  /* Clickable when peeking */
+}
+
+.kuroko-link.k-right.peek {
+  transform: translate(65px, -30px) rotate(65deg) scaleX(-1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.kuroko-link.k-top.peek {
+  transform: translate(0, -100px) rotate(0deg);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.kuroko-link.k-bottom.peek {
+  transform: translate(0, 100px) rotate(180deg);
+  opacity: 1;
+  pointer-events: auto;
 }
