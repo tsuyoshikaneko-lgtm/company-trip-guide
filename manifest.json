@@ -1,0 +1,21 @@
+{
+    "name": "2026年 社員旅行のしおり in 佐原",
+    "short_name": "社員旅行しおり",
+    "description": "2026年の社員旅行 in 佐原のしおりです。日程やマップなどをご覧いただけます。",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#339af0",
+    "icons": [
+        {
+            "src": "./img/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./img/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

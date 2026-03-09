@@ -10,20 +10,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <!-- PWA Settings -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#339af0">
+  <link rel="icon" href="img/icon-192x192.png" type="image/png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 
 <body>
 
   <!-- Kuroko Link -->
   <a href="https://note.com/sho0113/n/nc88dd74d1985" target="_blank" id="kuroko" class="kuroko-link k-left">
-    <img src="img/kuroko.png" alt="黒子" class="kuroko-img">
+    <img src="img/kuroko.webp" alt="黒子" class="kuroko-img">
   </a>
 
   <div class="notebook-wrapper">
     <!-- Floating character pinned to bottom corner -->
     <a href="https://app.slack.com/client/T02PVSVJR6J/C06RS5YQL3C" target="_blank" class="floating-bear" id="mascot"
       style="text-decoration: none; cursor: pointer;">
-      <img src="img/bear_puppet_latest.png" alt="くまさん" class="bear-img wiggling">
+      <img src="img/bear_puppet_latest.webp" alt="くまさん" class="bear-img wiggling">
       <div class="speech-bubble" id="bear-message">
         なんでも聞いてね！🐻💬
       </div>
@@ -43,7 +49,7 @@
 
       <div class="hero-character reveal">
         <div class="bear-illustration">
-          <img src="img/bear_puppet_latest.png" alt="くまさん" class="floating">
+          <img src="img/bear_puppet_latest.webp" alt="くまさん" class="floating">
         </div>
         <div class="intro-speech">
           <p><strong>みんな！やっほー！くまさんだよ！</strong></p>
@@ -127,8 +133,8 @@
         <details class="custom-accordion" open>
           <summary>🚨 困ったら</summary>
           <div class="accordion-content emergency">
-            <p><strong>緊急連絡先：じゃみさん</strong></p>
-            <div class="fake-number">📞 090-XXXX-XXXX</div>
+            <p><strong>緊急連絡先：なっちゃん</strong></p>
+            <div class="fake-number">📞 080-2048-8443</div>
           </div>
         </details>
 
@@ -136,7 +142,7 @@
 
       <div class="note-from-bear">
         <div class="bear-avatar">
-          <img src="img/bear_puppet_latest.png" alt="くまさん">
+          <img src="img/bear_puppet_latest.webp" alt="くまさん">
         </div>
         <div>
           <p><strong>遅刻だけ気をつければよさそうだね！</strong></p>
@@ -216,19 +222,87 @@
         </div>
 
         <div class="timeline-item event-hotel">
-          <div class="time">17:00 〜 17:15頃</div>
+          <div class="time">15:00 〜 17:15</div>
           <div class="content card">
-            <span class="tag type-all">＠KAGURAに全員</span>
-            <h4 style="font-size: 1.2rem; margin: 5px 0;">🏨 チェックイン</h4>
-            <p><a href="https://www.nipponia-sawara.jp/stay" target="_blank">ホテル</a></p>
+            <span class="tag type-all" style="background: var(--text-dark);">各自でチェックイン！</span>
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🏨 ホテル チェックイン</h4>
+            <p>15:00から17:15までの間に、各自で<a href="https://www.nipponia-sawara.jp/stay" target="_blank">ホテル (KAGURA等)</a>
+              へチェックインしてください。</p>
+
+            <details class="custom-accordion" style="margin-top: 15px;">
+              <summary style="padding: 12px 15px; font-size: 1rem;">🔑 部屋割りについて</summary>
+              <div class="accordion-content" style="padding: 15px;">
+                <table class="room-table">
+                  <thead>
+                    <tr>
+                      <th>部屋名・部屋番号</th>
+                      <th>部屋割</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>YATA　グランド103号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド2台、エキストラ＋１</span></td>
+                      <td>まい、<br>まい息子</td>
+                    </tr>
+                    <tr>
+                      <td>AOI　スイート201号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド2台、エキストラ＋１or布団＋２</span></td>
+                      <td>じゃみ、<br>かね</td>
+                    </tr>
+                    <tr>
+                      <td>SEIGAKU プレミア301号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド4台</span></td>
+                      <td>さらしー、<br>だいち</td>
+                    </tr>
+                    <tr>
+                      <td>SEIGAKU　スイート302号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド2台、エキストラ＋１</span></td>
+                      <td>つよ、<br>つよ息子</td>
+                    </tr>
+                    <tr>
+                      <td>GOKO グランド401号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド2台、布団＋１</span></td>
+                      <td>よっしー</td>
+                    </tr>
+                    <tr>
+                      <td>GOKO グランド402号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド2台、布団＋１</span></td>
+                      <td>みや</td>
+                    </tr>
+                    <tr>
+                      <td>GOKO プレミア404号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド2台、布団＋１</span></td>
+                      <td>よね、らい</td>
+                    </tr>
+                    <tr>
+                      <td>SHIPPOUデラックス501号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド3台：3名利用で計算</span></td>
+                      <td>ひろや、<br>なっちゃん</td>
+                    </tr>
+                    <tr>
+                      <td>SHIPPOU デラックス502号室<br><span
+                          style="font-size: 0.8rem; color: #666; font-weight: normal;">ベッド3台：3名利用で計算</span></td>
+                      <td>うっちー、<br>みー</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
           </div>
         </div>
 
         <div class="timeline-item event-meal">
-          <div class="time">17:30 〜</div>
-          <div class="content card">
-            <h4 style="font-size: 1.2rem; margin: 5px 0;">🍲 夕ごはん</h4>
-            <p>ホテルで夕食</p>
+          <div class="time wiggling" style="color: var(--accent-red); font-size: 1.4rem;">17:30 〜</div>
+          <div class="content card highlight-card"
+            style="border: 4px solid var(--accent-red); box-shadow: 6px 6px 0px rgba(255, 94, 94, 0.4);">
+            <div class="badge wiggling" style="margin-bottom: 5px; background: var(--accent-red); font-size: 1.2rem;">📣
+              全員集合!!</div>
+            <h4 style="font-size: 1.4rem; margin: 10px 0;"><span class="marker-highlight marker-yellow">🍲 夕ごはん
+                ＋立澤さん</span></h4>
+            <p style="font-weight: 900; font-size: 1.1rem;">ホテルで夕食</p>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 5px;">立澤さんも交えて、全員で楽しい夕食の時間を過ごしましょう！絶対来てね！
+            </p>
           </div>
         </div>
 
@@ -250,8 +324,8 @@
         <div class="timeline-item event-meal">
           <div class="time">各自</div>
           <div class="content card">
-            <span class="tag type-all">お部屋で準備</span>
-            <h4 style="font-size: 1.2rem; margin: 5px 0;">🍳 朝ごはん(お部屋)</h4>
+            <span class="tag type-all">各自でホテルの朝食会場へ</span>
+            <h4 style="font-size: 1.2rem; margin: 5px 0;">🍳 朝ごはん</h4>
           </div>
         </div>
 
@@ -259,10 +333,20 @@
           <div class="time">〜 12:00</div>
           <div class="content card">
             <h4 style="font-size: 1.2rem; margin: 5px 0;">⛩️ 香取神宮参詣</h4>
-            <p style="color: var(--text-light); margin-bottom: 10px;">🚕 タクシー相乗りで10分程度</p>
+            <p style="color: var(--text-light); margin-bottom: 10px;">朝の時間をゆったり過ごすか、神宮へ参拝するか選べます！</p>
             <div class="options-container">
-              <div class="option-box"><span class="tag type-opt">任意</span> 自由参加</div>
-              <div class="option-box"><span class="tag type-opt">任意</span> お部屋でゆっくり</div>
+              <div class="option-box">
+                <span class="tag type-opt">任意</span>
+                <p style="margin-top: 8px; font-weight: 900;">香取神宮へ行く人</p>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                  <strong style="color: var(--accent-red);">10:00 集合</strong><br>
+                  🚕 タクシー相乗りで10分程度
+                </div>
+              </div>
+              <div class="option-box" style="display: flex; flex-direction: column; justify-content: center;">
+                <div><span class="tag type-opt">任意</span></div>
+                <p style="margin-top: 8px; font-weight: 900;">お部屋でゆっくり 🍵</p>
+              </div>
             </div>
           </div>
         </div>
@@ -361,13 +445,32 @@
           ここに資料を集めたから、よかったらみてみてね！</p>
       </div>
 
+      <!-- Custom Map Link -->
+      <div class="card highlight-card"
+        style="margin-bottom: 40px; border: 4px solid var(--accent-blue); box-shadow: 6px 6px 0px rgba(51, 154, 240, 0.4); text-align: center;">
+        <h3 style="margin-bottom: 10px; font-size: 1.4rem; color: var(--text-dark);"><span class="icon">🧭</span>
+          近隣の観光マップ</h3>
+        <p style="font-size: 1.05rem; line-height: 1.6;">いろんなスポットをまとめた特製リストだよ！<br>自由行動のときにぜひ活用してね！</p>
+        <a href="https://www.google.co.jp/maps/@/data=!3m1!4b1!4m3!11m2!2sLvm3kKEmQsyReCSMK4R3Tg!3e3?entry=tts&g_ep=EgoyMDI2MDMwMi4wKgBIAVAD&skid=0427f5a6-a055-4833-882c-85ce01cbb0d0"
+          target="_blank" class="btn btn-primary wiggling"
+          style="margin-top: 15px; display: inline-block; font-size: 1.1rem; background: var(--accent-blue); border-color: var(--accent-blue);">Google
+          Mapsで開く 🗺️</a>
+
+        <!-- Illustration Map -->
+        <div style="margin-top: 25px; border-top: 2px dashed #d0ebff; padding-top: 20px;">
+          <p style="font-weight: bold; margin-bottom: 15px; color: var(--text-dark);">👇 ホテル・周辺位置のイメージマップ �</p>
+          <img src="img/sawara_map.webp" alt="佐原周辺のイラストマップ"
+            style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid #fff;">
+        </div>
+      </div>
+
       <!-- Polaroid Gallery Grid -->
       <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 40px;">
         <div class="polaroid" data-caption="佐原の町並み" style="max-width: 250px;">
-          <img src="img/sawara_town.jpg" alt="佐原の町並みと舟めぐり">
+          <img src="img/sawara_town.webp" alt="佐原の町並みと舟めぐり">
         </div>
         <div class="polaroid" data-caption="おいしいごはん" style="max-width: 250px; transform: rotate(3deg);">
-          <img src="img/sawara_food.jpg" alt="佐原のうなぎ">
+          <img src="img/sawara_food.webp" alt="佐原のうなぎ">
         </div>
       </div>
 
@@ -420,7 +523,7 @@
     <footer class="site-footer">
       <a href="https://www.youtube.com/watch?v=JD5DcwTneFg" target="_blank" class="wiggling"
         style="margin-bottom: 20px; display: inline-block;">
-        <img src="img/bear_puppet_latest.png" alt="くまさん" style="width: 100px; mix-blend-mode: multiply;">
+        <img src="img/bear_puppet_latest.webp" alt="くまさん" style="width: 100px; mix-blend-mode: multiply;">
       </a>
       <p style="font-size: 1.2rem;">気をつけて行ってきてね！楽しんで！🐻</p>
       <div class="footer-credit">© 2026 Company Trip Guide</div>
@@ -429,6 +532,19 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+  </script>
 </body>
 
 </html>

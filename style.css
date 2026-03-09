@@ -608,6 +608,29 @@ a:hover {
   border-top: 2px dashed var(--accent-red);
 }
 
+.room-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.room-table th,
+.room-table td {
+  border: 1px solid #eee;
+  padding: 8px 10px;
+}
+
+.room-table th {
+  background: #f9f9f9;
+  font-weight: 900;
+  color: var(--text-dark);
+}
+
+.room-table tr:nth-child(even) {
+  background: #fafafa;
+}
+
 .fake-number {
   font-size: 2rem;
   font-weight: 900;
@@ -841,12 +864,14 @@ a:hover {
   }
 
   .spot-links {
-    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 
   .spot-btn {
-    font-size: 0.85rem;
-    padding: 10px 15px;
+    font-size: 0.9rem;
+    padding: 12px 15px;
   }
 
   .floating-bear {
@@ -1110,13 +1135,13 @@ a:hover {
 }
 
 .kuroko-link.k-top.peek {
-  transform: translate(0, -100px) rotate(0deg);
+  transform: translate(0, -55px) rotate(0deg);
   opacity: 1;
   pointer-events: auto;
 }
 
 .kuroko-link.k-bottom.peek {
-  transform: translate(0, 100px) rotate(180deg);
+  transform: translate(0, 55px) rotate(180deg);
   opacity: 1;
   pointer-events: auto;
 }
