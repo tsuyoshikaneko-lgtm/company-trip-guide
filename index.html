@@ -215,7 +215,10 @@
               <div class="option-box">
                 <span class="tag type-opt">任意オプション</span>
                 <p style="margin-top: 8px; font-weight: 900;">和菓子作り体験</p>
-                <p style="font-size: 0.85rem; color: var(--text-light);">（確認中）</p>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                  （60分）16:00〜 ＠岩立本店（ホテルから車で6分）
+                </div>
+                <button onclick="document.getElementById('modal-wagashi').showModal()" class="btn-member">👀 参加メンバー（9名）</button>
               </div>
             </div>
           </div>
@@ -226,7 +229,7 @@
           <div class="content card">
             <span class="tag type-all" style="background: var(--text-dark);">各自でチェックイン！</span>
             <h4 style="font-size: 1.2rem; margin: 5px 0;">🏨 ホテル チェックイン</h4>
-            <p>15:00から17:15までの間に、各自で<a href="https://www.nipponia-sawara.jp/stay" target="_blank">ホテル (KAGURA等)</a>
+            <p>15:00から17:15までの間に、各自で<a href="https://www.nipponia-sawara.jp/stay" target="_blank">ホテル (KAGURA)</a>
               へチェックインしてください。</p>
 
             <details class="custom-accordion" style="margin-top: 15px;">
@@ -322,10 +325,11 @@
       <!-- DAY 2 -->
       <div class="timeline hidden" id="day2">
         <div class="timeline-item event-meal">
-          <div class="time">各自</div>
+          <div class="time">8:00〜</div>
           <div class="content card">
-            <span class="tag type-all">各自でホテルの朝食会場へ</span>
+            <span class="tag type-all">朝食会場へ</span>
             <h4 style="font-size: 1.2rem; margin: 5px 0;">🍳 朝ごはん</h4>
+            <p>8:00 / 8:30 / 9:00 から各自選択（会場は10:00まで）</p>
           </div>
         </div>
 
@@ -363,47 +367,93 @@
           <div class="time">12:00 〜 13:15</div>
           <div class="content card">
             <h4 style="font-size: 1.2rem; margin: 5px 0;">🍜 昼ごはん</h4>
-            <p>お昼ご飯どころをピックアップして自由に選択</p>
-            <div class="options-container">
-              <div class="option-box">
-                <span class="tag type-opt">おすすめ①</span>
-                <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12000489"
-                    target="_blank">うなぎの山田</a></p>
-                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
-                  佐原名物のうなぎ！老舗の味
+            <p>佐原エリアのお店から自由に選択！</p>
+            <details class="custom-accordion" style="margin-top: 15px; border-color: var(--accent-blue);">
+              <summary>🍽️ ランチ候補一覧（タップで開く）</summary>
+              <div class="accordion-content">
+                <div class="option-box" style="margin-bottom: 10px;">
+                  <span class="tag type-opt">🍕 ピザ・地ビール</span>
+                  <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12054602/" target="_blank">伊能忠次郎商店</a></p>
+                  <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    自家醸造クラフトビール＆手作りチーズのピザ。子どもも入りやすい雰囲気。11:00〜20:00 水曜休
+                  </div>
+                </div>
+                <div class="option-box" style="margin-bottom: 10px;">
+                  <span class="tag type-opt">🐷 とんかつ</span>
+                  <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12044983/" target="_blank">木の下</a></p>
+                  <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    明治期の船宿を改装。地元産「林SPF豚」のロースかつが名物。木曜休
+                  </div>
+                </div>
+                <div class="option-box" style="margin-bottom: 10px;">
+                  <span class="tag type-opt">🫙 発酵料理</span>
+                  <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12061706/" target="_blank">醸し処 和ぎ（なぎ）</a></p>
+                  <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    米麹おむすび・発酵おかずのランチ。※午後のドレッシングづくり体験の会場でもあります
+                  </div>
+                </div>
+                <div class="option-box" style="margin-bottom: 10px;">
+                  <span class="tag type-opt">🐟 うなぎ</span>
+                  <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12003440/" target="_blank">長谷川</a></p>
+                  <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    天保2年（1831年）創業の老舗うなぎ店。座敷あり。11:00〜14:00 / 17:00〜19:00 水曜休・予約不可
+                  </div>
+                </div>
+                <div class="option-box" style="margin-bottom: 10px;">
+                  <span class="tag type-opt">🐟 うなぎ</span>
+                  <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12000489/" target="_blank">うなぎの山田</a></p>
+                  <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    佐原名物のうなぎ！老舗の味
+                  </div>
+                </div>
+                <div class="option-box" style="margin-bottom: 10px;">
+                  <span class="tag type-opt">🍚 お食事処</span>
+                  <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12014161/" target="_blank">はなよし</a></p>
+                  <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    地元で人気のお食事処
+                  </div>
+                </div>
+                <div class="option-box">
+                  <span class="tag type-opt">🥢 黒切そば</span>
+                  <p style="margin-top: 8px; font-weight: 900;"><a href="https://tabelog.com/chiba/A1204/A120404/12000113/" target="_blank">小堀屋本店</a></p>
+                  <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                    1782年創業。日高昆布を練り込んだ名物「黒切そば」はここだけ。県指定有形文化財の建物
+                  </div>
                 </div>
               </div>
-              <div class="option-box">
-                <span class="tag type-opt">おすすめ②</span>
-                <p style="margin-top: 8px; font-weight: 900;"><a
-                    href="https://tabelog.com/chiba/A1204/A120404/12014161/" target="_blank">はなよし</a></p>
-                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
-                  地元で人気のお食事処
-                </div>
-              </div>
-            </div>
+            </details>
           </div>
         </div>
 
         <div class="timeline-item">
-          <div class="time">13:15 〜 16:00</div>
+          <div class="time">14:00 〜 16:00</div>
           <div class="content card">
             <h4 style="font-size: 1.2rem; margin: 5px 0;">🛶 自由行動</h4>
-            <p>希望者はアクティビティを事前予約してね！</p>
+            <p>以下のアクティビティが予約済みです！</p>
             <div class="options-container">
               <div class="option-box">
                 <span class="tag type-opt">アクティビティ①</span>
-                <p style="margin-top: 8px; font-weight: 900;">発酵ドレッシング作り体験</p>
+                <p style="margin-top: 8px; font-weight: 900;">酒粕入浴剤づくり体験</p>
                 <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
-                  （45分）14:00-14:45<br>＠酵し処 和ぎ
+                  （15分）14:00〜 ＠ホテル
                 </div>
+                <button onclick="document.getElementById('modal-nyuyokuzai').showModal()" class="btn-member">👀 参加メンバー（9名）</button>
               </div>
               <div class="option-box">
                 <span class="tag type-opt">アクティビティ②</span>
-                <p style="margin-top: 8px; font-weight: 900;">酒粕入浴剤づくり体験</p>
+                <p style="margin-top: 8px; font-weight: 900;">発酵ドレッシング作り体験</p>
                 <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
-                  （15分）13:15-13:30<br>＠ホテルKAGURA
+                  （45分）14:00〜 ＠醸し処 和ぎ（ホテルから徒歩2分）
                 </div>
+                <button onclick="document.getElementById('modal-dressing1').showModal()" class="btn-member">👀 参加メンバー（2名）</button>
+              </div>
+              <div class="option-box">
+                <span class="tag type-opt">アクティビティ③</span>
+                <p style="margin-top: 8px; font-weight: 900;">発酵ドレッシング作り体験</p>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">
+                  （45分）15:00〜 ＠醸し処 和ぎ（ホテルから徒歩2分）
+                </div>
+                <button onclick="document.getElementById('modal-dressing2').showModal()" class="btn-member">👀 参加メンバー（10名）</button>
               </div>
             </div>
           </div>
@@ -545,6 +595,186 @@
       });
     }
   </script>
+
+  <!-- アクティビティ参加メンバーモーダル -->
+  <style>
+    .btn-member {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      color: var(--accent-blue);
+      background: #f0f7ff;
+      border: 2px solid var(--accent-blue);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 2px 2px 0px rgba(77, 166, 255, 0.3);
+    }
+    .btn-member:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0px rgba(77, 166, 255, 0.4);
+      background: white;
+    }
+    .btn-member:active {
+      transform: translate(1px, 1px);
+      box-shadow: 0px 0px 0px transparent;
+    }
+
+    dialog.member-modal {
+      border: 4px solid var(--text-dark);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 320px;
+      width: 90%;
+      box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+      background: #fffcf0;
+      color: var(--text-dark);
+      font-family: inherit;
+    }
+    dialog.member-modal::backdrop {
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(2px);
+    }
+    dialog.member-modal h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.15rem;
+      border-bottom: 2px dashed #ebd9c8;
+      padding-bottom: 8px;
+    }
+    dialog.member-modal .modal-subtext {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin: 0 0 15px 0;
+      font-weight: bold;
+    }
+    dialog.member-modal ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px 0;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    dialog.member-modal ul li {
+      padding: 8px 5px;
+      border-bottom: 2px dotted #e1d8c1;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    dialog.member-modal ul li::before {
+      content: '👤';
+      font-size: 1rem;
+    }
+    dialog.member-modal ul li:last-child {
+      border-bottom: none;
+    }
+    dialog.member-modal button.close-btn {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--text-dark);
+      border-radius: 12px;
+      background: var(--accent-yellow);
+      color: var(--text-dark);
+      font-size: 1rem;
+      font-weight: 900;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+    dialog.member-modal button.close-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+    }
+    dialog.member-modal button.close-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+    }
+    dialog.member-modal[open] {
+      animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes modalPopIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -40%) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+  </style>
+
+  <dialog id="modal-wagashi" class="member-modal">
+    <h3>🍡 和菓子作り体験（9名）</h3>
+    <p class="modal-subtext">3/19(木) 16:00〜 ＠岩立本店</p>
+    <ul>
+      <li>まい＋息子（ふたりぶん）</li>
+      <li>うっち</li>
+      <li>らい</li>
+      <li>さらし</li>
+      <li>よね</li>
+      <li>じゃみ</li>
+      <li>みー</li>
+      <li>つよ＋息子（ひとりぶん）</li>
+    </ul>
+    <button class="close-btn" onclick="this.closest('dialog').close()">閉じる</button>
+  </dialog>
+
+  <dialog id="modal-dressing1" class="member-modal">
+    <h3>🫙 発酵ドレッシング作り（2名）</h3>
+    <p class="modal-subtext">3/20(金) 14:00〜 ＠醸し処 和ぎ</p>
+    <ul>
+      <li>みー</li>
+      <li>なっちゃん</li>
+    </ul>
+    <button class="close-btn" onclick="this.closest('dialog').close()">閉じる</button>
+  </dialog>
+
+  <dialog id="modal-nyuyokuzai" class="member-modal">
+    <h3>🧴 酒粕入浴剤づくり（9名）</h3>
+    <p class="modal-subtext">3/20(金) 14:00〜 ＠ホテル</p>
+    <ul>
+      <li>つよぽん＋息子（ひとりぶん）</li>
+      <li>まい＋息子（ふたりぶん）</li>
+      <li>よっし</li>
+      <li>かね</li>
+      <li>うっち</li>
+      <li>よね</li>
+      <li>じゃみ</li>
+      <li>ひろや</li>
+    </ul>
+    <button class="close-btn" onclick="this.closest('dialog').close()">閉じる</button>
+  </dialog>
+
+  <dialog id="modal-dressing2" class="member-modal">
+    <h3>🫙 発酵ドレッシング作り（10名）</h3>
+    <p class="modal-subtext">3/20(金) 15:00〜 ＠醸し処 和ぎ</p>
+    <ul>
+      <li>つよぽん＋息子（ひとりぶん）</li>
+      <li>まい＋息子（ふたりぶん）</li>
+      <li>よっし</li>
+      <li>かね</li>
+      <li>よね</li>
+      <li>うっち</li>
+      <li>じゃみ</li>
+      <li>ひろや</li>
+      <li>だいち</li>
+    </ul>
+    <button class="close-btn" onclick="this.closest('dialog').close()">閉じる</button>
+  </dialog>
 </body>
 
 </html>
