@@ -404,11 +404,11 @@ document.addEventListener('DOMContentLoaded', () => {
       messageBubble.textContent = randomMsg;
       lastScrollTop = scrollTop;
 
-      // Add a slight bounce to the mascot
-      mascot.style.transform = "scale(1.1) rotate(5deg)";
+      // Add a slight bounce to the mascot (use class to avoid breaking CSS animation)
+      mascot.classList.add('bear-bounce');
       setTimeout(() => {
-        mascot.style.transform = "scale(0.9) rotate(0deg)";
-      }, 300);
+        mascot.classList.remove('bear-bounce');
+      }, 400);
     }
 
     // Hide bear near the bottom so it doesn't overlap the footer bear

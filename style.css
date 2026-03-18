@@ -1203,3 +1203,13 @@ a:hover {
   text-align: left;
   line-height: 1.6;
 }
+
+/* Bear bounce on scroll (class-based to avoid breaking wiggle animation) */
+@keyframes bearBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15) rotate(5deg); }
+  100% { transform: scale(1); }
+}
+.floating-bear.bear-bounce {
+  animation: bearBounce 0.4s ease-out;
+}
