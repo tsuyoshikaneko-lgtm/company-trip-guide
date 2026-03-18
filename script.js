@@ -1,6 +1,13 @@
 // ============================================
 // Scheduled Push Notification System
 // ============================================
+
+// Worker URL — update after deploying the Cloudflare Worker
+const PUSH_WORKER_URL = 'https://trip-push-worker.YOUR_SUBDOMAIN.workers.dev';
+
+// VAPID public key for Web Push subscription
+const VAPID_PUBLIC_KEY = 'BBgq9vZBcOV_b0P44gfsU272Y0n1I9UkL6pGXifwaCDiT-0JiDUHbxYnKCeWi3oecUipfWa4ghZKqsfPZEfw4xc';
+
 const TripNotifications = (() => {
   // Trip schedule: [month, day, hour, minute] in JST
   const SCHEDULE = [
@@ -113,22 +120,72 @@ const TripNotifications = (() => {
     clearTimers();
   }
 
+  // Convert VAPID public key for PushManager.subscribe()
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw = atob(base64);
+    return new Uint8Array([...raw].map(c => c.charCodeAt(0)));
+  }
+
+  // Subscribe to Web Push via the Cloudflare Worker
+  async function subscribePush() {
+    const reg = await navigator.serviceWorker.ready;
+    let subscription = await reg.pushManager.getSubscription();
+    if (!subscription) {
+      subscription = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+      });
+    }
+    // Send subscription to Worker for server-side push
+    await fetch(`${PUSH_WORKER_URL}/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(subscription.toJSON()),
+    });
+    return subscription;
+  }
+
+  // Unsubscribe from Web Push
+  async function unsubscribePush() {
+    const reg = await navigator.serviceWorker.ready;
+    const subscription = await reg.pushManager.getSubscription();
+    if (subscription) {
+      // Remove from Worker
+      await fetch(`${PUSH_WORKER_URL}/subscribe`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endpoint: subscription.endpoint }),
+      }).catch(() => {});
+      await subscription.unsubscribe();
+    }
+  }
+
   async function enable() {
     const granted = await requestPermission();
     if (!granted) return false;
+    try {
+      await subscribePush();
+    } catch (e) {
+      console.warn('Web Push subscription failed, falling back to local timers:', e);
+    }
     setEnabled(true);
-    start();
+    start(); // Local timers as fallback
     return true;
   }
 
-  function disable() {
+  async function disable() {
     setEnabled(false);
     stop();
+    try {
+      await unsubscribePush();
+    } catch (e) {
+      console.warn('Web Push unsubscribe failed:', e);
+    }
   }
 
-  // Re-schedule timers when the app returns to foreground.
-  // Mobile browsers suspend timers in the background, so this ensures
-  // missed notifications fire immediately when the user opens the app.
+  // Re-schedule local timers when the app returns to foreground
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && isEnabled()) {
       scheduleTimers();

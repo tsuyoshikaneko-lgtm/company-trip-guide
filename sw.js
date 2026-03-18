@@ -49,7 +49,29 @@ self.addEventListener('fetch', event => {
     );
 });
 
-// Scheduled notification check via message from main thread
+// Web Push event from server (Cloudflare Worker)
+self.addEventListener('push', event => {
+    let data = { title: '社員旅行のお知らせ', body: '' };
+    if (event.data) {
+        try {
+            data = event.data.json();
+        } catch {
+            data.body = event.data.text();
+        }
+    }
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: './img/icon-192x192.png',
+            badge: './img/icon-192x192.png',
+            tag: data.tag || 'trip-notification',
+            renotify: true,
+            vibrate: [200, 100, 200]
+        })
+    );
+});
+
+// Local notification via message from main thread (fallback)
 self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
         const { title, body, tag } = event.data;
