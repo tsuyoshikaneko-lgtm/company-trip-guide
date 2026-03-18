@@ -1,4 +1,163 @@
+// ============================================
+// Scheduled Push Notification System
+// ============================================
+const TripNotifications = (() => {
+  // Trip schedule: [month, day, hour, minute] in JST
+  const SCHEDULE = [
+    // === Day 1: 3/19 (Thu) ===
+    { time: [3, 19, 10, 30], title: '集合20分前！', body: '東京駅バス乗り場に10:50集合です。遅刻注意！', tag: 'day1-assembly' },
+    { time: [3, 19, 12, 30], title: 'まもなく昼ごはん', body: '12:40〜 ワーズワース（イタリアン）で全員ランチです', tag: 'day1-lunch' },
+    { time: [3, 19, 14, 55], title: 'チェックイン開始', body: '15:00〜17:15の間にホテル(KAGURA)へチェックインしてね', tag: 'day1-checkin' },
+    { time: [3, 19, 15, 45], title: '和菓子作り体験15分前', body: '16:00〜 岩立本店で和菓子作り体験スタート！', tag: 'day1-wagashi' },
+    { time: [3, 19, 17, 15], title: '全員集合！夕ごはん', body: '17:30〜 ホテルで夕食＋立澤さん。絶対来てね！', tag: 'day1-dinner' },
+
+    // === Day 2: 3/20 (Fri) ===
+    { time: [3, 20, 7, 45],  title: 'おはよう！朝ごはん', body: '8:00 / 8:30 / 9:00 から選択。会場は10:00まで', tag: 'day2-breakfast' },
+    { time: [3, 20, 9, 45],  title: '香取神宮 集合15分前', body: '10:00集合 タクシー相乗りで向かいます', tag: 'day2-shrine' },
+    { time: [3, 20, 11, 45], title: 'チェックアウト準備', body: '12:00チェックアウトです。荷物は預けられます', tag: 'day2-checkout' },
+    { time: [3, 20, 13, 45], title: 'アクティビティ準備', body: '14:00〜 酒粕入浴剤づくり / ドレッシング作り体験', tag: 'day2-activity1' },
+    { time: [3, 20, 14, 45], title: 'ドレッシング作り15:00の部', body: '15:00〜 醸し処 和ぎ（ホテルから徒歩2分）', tag: 'day2-activity2' },
+    { time: [3, 20, 15, 50], title: '中締め・振り返り', body: '16:00〜 いなえにて感想共有タイム！', tag: 'day2-closing' },
+    { time: [3, 20, 17, 20], title: 'バスの時間', body: '17:42発 佐原→東京（19:31着）。乗る方はお忘れなく！', tag: 'day2-bus' },
+  ];
+
+  const STORAGE_KEY = 'trip_notif_enabled';
+  const SENT_KEY = 'trip_notif_sent';
+  let checkInterval = null;
+
+  function isEnabled() {
+    return localStorage.getItem(STORAGE_KEY) === 'true';
+  }
+
+  function setEnabled(val) {
+    localStorage.setItem(STORAGE_KEY, val ? 'true' : 'false');
+  }
+
+  function getSentSet() {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(SENT_KEY) || '[]'));
+    } catch {
+      return new Set();
+    }
+  }
+
+  function markSent(tag) {
+    const sent = getSentSet();
+    sent.add(tag);
+    localStorage.setItem(SENT_KEY, JSON.stringify([...sent]));
+  }
+
+  async function requestPermission() {
+    if (!('Notification' in window)) return false;
+    if (Notification.permission === 'granted') return true;
+    if (Notification.permission === 'denied') return false;
+    const result = await Notification.requestPermission();
+    return result === 'granted';
+  }
+
+  async function sendNotification(item) {
+    const reg = await navigator.serviceWorker.ready;
+    reg.active.postMessage({
+      type: 'SHOW_NOTIFICATION',
+      title: item.title,
+      body: item.body,
+      tag: item.tag
+    });
+  }
+
+  function checkSchedule() {
+    if (!isEnabled()) return;
+    const now = new Date();
+    const sent = getSentSet();
+
+    for (const item of SCHEDULE) {
+      if (sent.has(item.tag)) continue;
+      const [month, day, hour, minute] = item.time;
+      const target = new Date(2026, month - 1, day, hour, minute, 0);
+      // Send if we're within the 5-minute window after the scheduled time
+      const diff = now - target;
+      if (diff >= 0 && diff < 5 * 60 * 1000) {
+        sendNotification(item);
+        markSent(item.tag);
+      }
+    }
+  }
+
+  function start() {
+    if (checkInterval) return;
+    checkSchedule();
+    checkInterval = setInterval(checkSchedule, 30 * 1000); // Check every 30 seconds
+  }
+
+  function stop() {
+    if (checkInterval) {
+      clearInterval(checkInterval);
+      checkInterval = null;
+    }
+  }
+
+  async function enable() {
+    const granted = await requestPermission();
+    if (!granted) return false;
+    setEnabled(true);
+    start();
+    return true;
+  }
+
+  function disable() {
+    setEnabled(false);
+    stop();
+  }
+
+  // Auto-start if previously enabled
+  if (isEnabled() && 'Notification' in window && Notification.permission === 'granted') {
+    start();
+  }
+
+  return { enable, disable, isEnabled, requestPermission, SCHEDULE, getSentSet };
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
+
+  // Notification Toggle UI
+  const notifBtn = document.getElementById('notif-toggle');
+  const notifStatus = document.getElementById('notif-status');
+  if (notifBtn) {
+    function updateNotifUI() {
+      const enabled = TripNotifications.isEnabled();
+      const supported = 'Notification' in window;
+      const denied = supported && Notification.permission === 'denied';
+
+      if (denied) {
+        notifBtn.textContent = '通知がブロックされています';
+        notifBtn.disabled = true;
+        notifBtn.classList.remove('active');
+        if (notifStatus) notifStatus.textContent = 'ブラウザの設定から通知を許可してください';
+      } else if (enabled) {
+        notifBtn.textContent = '通知をオフにする';
+        notifBtn.classList.add('active');
+        if (notifStatus) notifStatus.textContent = '旅行中、各イベント前にリマインダーが届きます';
+      } else {
+        notifBtn.textContent = '通知をオンにする';
+        notifBtn.classList.remove('active');
+        if (notifStatus) notifStatus.textContent = '';
+      }
+    }
+
+    notifBtn.addEventListener('click', async () => {
+      if (TripNotifications.isEnabled()) {
+        TripNotifications.disable();
+      } else {
+        const ok = await TripNotifications.enable();
+        if (!ok && 'Notification' in window && Notification.permission === 'denied') {
+          // permission denied
+        }
+      }
+      updateNotifUI();
+    });
+
+    updateNotifUI();
+  }
 
   // Tab Switching
   const tabBtns = document.querySelectorAll('.tab-btn');

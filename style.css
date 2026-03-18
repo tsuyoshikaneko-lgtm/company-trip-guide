@@ -1145,3 +1145,47 @@ a:hover {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* ============================
+   Notification UI
+   ============================ */
+.notif-card {
+  border: 3px dashed var(--accent-blue);
+  background: #f0f7ff;
+  text-align: center;
+}
+
+.btn-notif {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  color: white;
+  background: var(--accent-blue);
+  border: 3px solid var(--text-dark);
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s;
+}
+
+.btn-notif:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+}
+
+.btn-notif:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.btn-notif.active {
+  background: var(--accent-red);
+}
+
+.btn-notif:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
