@@ -8,9 +8,12 @@ const PUSH_WORKER_URL = 'https://trip-push-worker.YOUR_SUBDOMAIN.workers.dev';
 // VAPID public key for Web Push subscription
 const VAPID_PUBLIC_KEY = 'BBgq9vZBcOV_b0P44gfsU272Y0n1I9UkL6pGXifwaCDiT-0JiDUHbxYnKCeWi3oecUipfWa4ghZKqsfPZEfw4xc';
 
+// Test mode: ?test-push in URL activates test schedule (notifications in seconds, not real dates)
+const TEST_MODE = new URLSearchParams(window.location.search).has('test-push');
+
 const TripNotifications = (() => {
-  // Trip schedule: [month, day, hour, minute] in JST
-  const SCHEDULE = [
+  // Production schedule: [month, day, hour, minute] in JST
+  const PROD_SCHEDULE = [
     // === Day 1: 3/19 (Thu) ===
     { time: [3, 19, 10, 30], title: '集合20分前！', body: '東京駅バス乗り場に10:50集合です。遅刻注意！', tag: 'day1-assembly' },
     { time: [3, 19, 12, 30], title: 'まもなく昼ごはん', body: '12:40〜 ワーズワース（イタリアン）で全員ランチです', tag: 'day1-lunch' },
@@ -28,9 +31,31 @@ const TripNotifications = (() => {
     { time: [3, 20, 17, 20], title: 'バスの時間', body: '17:42発 佐原→東京（19:31着）。乗る方はお忘れなく！', tag: 'day2-bus' },
   ];
 
-  const STORAGE_KEY = 'trip_notif_enabled';
-  const SENT_KEY = 'trip_notif_sent';
+  // Test schedule: fires at 5s, 15s, 30s from now (uses delay instead of absolute time)
+  function buildTestSchedule() {
+    const now = new Date();
+    function offset(seconds) {
+      const t = new Date(now.getTime() + seconds * 1000);
+      return [t.getMonth() + 1, t.getDate(), t.getHours(), t.getMinutes()];
+    }
+    return [
+      { time: offset(5),  title: '[TEST] 集合20分前！', body: 'テスト通知 (5秒後)', tag: 'test-1' },
+      { time: offset(15), title: '[TEST] まもなく昼ごはん', body: 'テスト通知 (15秒後)', tag: 'test-2' },
+      { time: offset(30), title: '[TEST] 全員集合！夕ごはん', body: 'テスト通知 (30秒後)', tag: 'test-3' },
+    ];
+  }
+
+  const SCHEDULE = TEST_MODE ? buildTestSchedule() : PROD_SCHEDULE;
+
+  const STORAGE_KEY = TEST_MODE ? 'trip_notif_enabled_test' : 'trip_notif_enabled';
+  const SENT_KEY = TEST_MODE ? 'trip_notif_sent_test' : 'trip_notif_sent';
   let pendingTimers = [];
+
+  // In test mode, always clear previous test state
+  if (TEST_MODE) {
+    localStorage.removeItem(SENT_KEY);
+    localStorage.removeItem(STORAGE_KEY);
+  }
 
   function isEnabled() {
     return localStorage.getItem(STORAGE_KEY) === 'true';
@@ -78,30 +103,29 @@ const TripNotifications = (() => {
     if (!isEnabled()) return;
     const now = Date.now();
     const sent = getSentSet();
+    // In test mode, use current year; in prod, use 2026
+    const year = TEST_MODE ? new Date().getFullYear() : 2026;
+    const graceWindow = TEST_MODE ? 60 * 1000 : 5 * 60 * 1000;
 
     for (const item of SCHEDULE) {
       if (sent.has(item.tag)) continue;
       const [month, day, hour, minute] = item.time;
-      const target = new Date(2026, month - 1, day, hour, minute, 0).getTime();
+      const target = new Date(year, month - 1, day, hour, minute, 0).getTime();
       const delay = target - now;
 
-      if (delay < -5 * 60 * 1000) {
-        // More than 5 min past — skip
-        continue;
-      }
+      if (delay < -graceWindow) continue;
 
       if (delay <= 0) {
-        // Within the 5-min window — fire immediately
         sendNotification(item);
         markSent(item.tag);
         continue;
       }
 
-      // Future — set a single setTimeout
       const timer = setTimeout(() => {
         if (!isEnabled()) return;
         sendNotification(item);
         markSent(item.tag);
+        if (TEST_MODE) updateTestPanel();
       }, delay);
       pendingTimers.push(timer);
     }
@@ -206,7 +230,19 @@ const TripNotifications = (() => {
       || navigator.standalone === true;
   }
 
-  return { enable, disable, isEnabled, requestPermission, isIOS, isStandalone, SCHEDULE, getSentSet };
+  // Update test panel status (called from timer callbacks)
+  function updateTestPanel() {
+    const panel = document.getElementById('test-panel-log');
+    if (!panel) return;
+    const sent = getSentSet();
+    const lines = SCHEDULE.map(item => {
+      const done = sent.has(item.tag);
+      return `${done ? '[DONE]' : '[WAIT]'} ${item.title}`;
+    });
+    panel.textContent = lines.join('\n');
+  }
+
+  return { enable, disable, isEnabled, requestPermission, isIOS, isStandalone, isTestMode: () => TEST_MODE, SCHEDULE, getSentSet, updateTestPanel };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -251,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     notifBtn.addEventListener('click', async () => {
       if (TripNotifications.isEnabled()) {
-        TripNotifications.disable();
+        await TripNotifications.disable();
       } else {
         const ok = await TripNotifications.enable();
         if (!ok && 'Notification' in window && Notification.permission === 'denied') {
@@ -259,9 +295,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       updateNotifUI();
+      if (TEST_MODE) TripNotifications.updateTestPanel();
     });
 
     updateNotifUI();
+  }
+
+  // Test Mode Panel
+  const testPanel = document.getElementById('test-panel');
+  if (TEST_MODE && testPanel) {
+    testPanel.style.display = 'block';
+
+    // Worker Push test button
+    const testWorkerBtn = document.getElementById('test-worker-push');
+    const testWorkerStatus = document.getElementById('test-worker-status');
+    if (testWorkerBtn) {
+      testWorkerBtn.addEventListener('click', async () => {
+        testWorkerStatus.textContent = '送信中...';
+        testWorkerStatus.style.color = 'var(--text-light)';
+        try {
+          const reg = await navigator.serviceWorker.ready;
+          const subscription = await reg.pushManager.getSubscription();
+          if (!subscription) {
+            testWorkerStatus.textContent = '先に「通知をオンにする」を押してください';
+            testWorkerStatus.style.color = 'var(--accent-red)';
+            return;
+          }
+          const res = await fetch(`${PUSH_WORKER_URL}/test-push`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subscription: subscription.toJSON(),
+              title: '[TEST] Worker Push',
+              body: 'Cloudflare Worker経由の通知テスト成功！',
+            }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            testWorkerStatus.textContent = 'Push送信成功！通知が届くはずです';
+            testWorkerStatus.style.color = 'var(--accent-green)';
+          } else {
+            testWorkerStatus.textContent = `Push送信失敗 (status: ${data.status})`;
+            testWorkerStatus.style.color = 'var(--accent-red)';
+          }
+        } catch (e) {
+          testWorkerStatus.textContent = `エラー: ${e.message}`;
+          testWorkerStatus.style.color = 'var(--accent-red)';
+        }
+      });
+    }
   }
 
   // Tab Switching

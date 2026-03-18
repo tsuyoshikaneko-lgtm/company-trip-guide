@@ -585,6 +585,23 @@
 
     </section>
 
+    <!-- Test Mode Panel: only visible with ?test-push -->
+    <section class="test-panel section" id="test-panel" style="display: none;">
+      <div class="card" style="border: 3px solid #ff6b6b; background: #fff5f5;">
+        <h3 style="color: #ff6b6b;">TEST MODE</h3>
+        <p style="margin: 8px 0; font-size: 0.9rem;">このパネルは <code>?test-push</code> 付きURLでのみ表示されます。本番には表示されません。</p>
+        <hr style="border: 0; border-top: 2px dashed #ffc9c9; margin: 12px 0;">
+        <h4>ローカル通知テスト</h4>
+        <p style="font-size: 0.85rem; color: var(--text-light);">「通知をオンにする」を押すと、5秒・15秒・30秒後に通知が届きます。</p>
+        <pre id="test-panel-log" style="background: #2d2d2d; color: #4ade80; padding: 12px; border-radius: 8px; font-size: 0.8rem; margin-top: 10px; white-space: pre-wrap;">[待機中] 通知をオンにしてください</pre>
+        <hr style="border: 0; border-top: 2px dashed #ffc9c9; margin: 12px 0;">
+        <h4>Worker Push テスト</h4>
+        <p style="font-size: 0.85rem; color: var(--text-light);">Worker経由でサーバーPushを即時テスト送信します。</p>
+        <button id="test-worker-push" class="btn-notif" style="margin-top: 10px; background: #ff6b6b; font-size: 0.9rem;">Worker経由でPush送信</button>
+        <p id="test-worker-status" class="small-text" style="margin-top: 8px; font-weight: bold;"></p>
+      </div>
+    </section>
+
     <footer class="site-footer">
       <a href="https://www.youtube.com/watch?v=JD5DcwTneFg" target="_blank" class="wiggling"
         style="margin-bottom: 20px; display: inline-block;">

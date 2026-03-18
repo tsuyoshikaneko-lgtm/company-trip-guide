@@ -230,6 +230,24 @@ export default {
       });
     }
 
+    // POST /test-push — send a test notification to a specific subscription
+    if (url.pathname === '/test-push' && request.method === 'POST') {
+      const { subscription, title, body } = await request.json();
+      if (!subscription || !subscription.endpoint) {
+        return new Response(JSON.stringify({ error: 'subscription required' }), {
+          status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
+      const payload = {
+        title: title || '[TEST] テスト通知',
+        body: body || 'Worker経由のPush通知テストです',
+      };
+      const response = await sendPush(subscription, payload, env);
+      return new Response(JSON.stringify({ ok: response.ok, status: response.status }), {
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
+    }
+
     // GET /health
     if (url.pathname === '/health') {
       return new Response(JSON.stringify({ status: 'ok' }), {
