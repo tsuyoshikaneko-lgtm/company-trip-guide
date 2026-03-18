@@ -1191,6 +1191,11 @@ a:hover {
   background: #ccc;
   cursor: not-allowed;
   box-shadow: none;
+  transform: none;
+}
+.btn-notif:disabled:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .ios-hint {
