@@ -5,7 +5,7 @@ const urlsToCache = [
     './style.css',
     './script.js',
     './manifest.json',
-    './img/icon-192x192.png',
+    '/img/icon-192x192.png',
     './img/icon-512x512.png',
     './img/apple-touch-icon.png',
     './img/kuroko.webp',
@@ -62,8 +62,8 @@ self.addEventListener('push', event => {
     event.waitUntil(
         self.registration.showNotification(data.title, {
             body: data.body,
-            icon: './img/icon-192x192.png',
-            badge: './img/icon-192x192.png',
+            icon: '/img/icon-192x192.png',
+            badge: '/img/icon-192x192.png',
             tag: data.tag || 'trip-notification',
             renotify: true,
             vibrate: [200, 100, 200]
@@ -77,8 +77,8 @@ self.addEventListener('message', event => {
         const { title, body, tag } = event.data;
         self.registration.showNotification(title, {
             body: body,
-            icon: './img/icon-192x192.png',
-            badge: './img/icon-192x192.png',
+            icon: '/img/icon-192x192.png',
+            badge: '/img/icon-192x192.png',
             tag: tag,
             renotify: true,
             vibrate: [200, 100, 200]

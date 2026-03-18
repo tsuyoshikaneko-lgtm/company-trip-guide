@@ -52,21 +52,32 @@ const TripNotifications = (() => {
 
   // In test mode, always clear previous test state
   if (TEST_MODE) {
-    localStorage.removeItem(SENT_KEY);
-    localStorage.removeItem(STORAGE_KEY);
+    storageRemove(SENT_KEY);
+    storageRemove(STORAGE_KEY);
+  }
+
+  // Safe localStorage wrapper (iOS private browsing may throw)
+  function storageGet(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  }
+  function storageSet(key, val) {
+    try { localStorage.setItem(key, val); } catch { /* ignore */ }
+  }
+  function storageRemove(key) {
+    try { localStorage.removeItem(key); } catch { /* ignore */ }
   }
 
   function isEnabled() {
-    return localStorage.getItem(STORAGE_KEY) === 'true';
+    return storageGet(STORAGE_KEY) === 'true';
   }
 
   function setEnabled(val) {
-    localStorage.setItem(STORAGE_KEY, val ? 'true' : 'false');
+    storageSet(STORAGE_KEY, val ? 'true' : 'false');
   }
 
   function getSentSet() {
     try {
-      return new Set(JSON.parse(localStorage.getItem(SENT_KEY) || '[]'));
+      return new Set(JSON.parse(storageGet(SENT_KEY) || '[]'));
     } catch {
       return new Set();
     }
@@ -75,7 +86,7 @@ const TripNotifications = (() => {
   function markSent(tag) {
     const sent = getSentSet();
     sent.add(tag);
-    localStorage.setItem(SENT_KEY, JSON.stringify([...sent]));
+    storageSet(SENT_KEY, JSON.stringify([...sent]));
   }
 
   async function requestPermission() {
@@ -221,7 +232,8 @@ const TripNotifications = (() => {
   }
 
   function isIOS() {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    return /iPad|iPhone|iPod/.test(navigator.userAgent)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   }
 
   function isStandalone() {
@@ -381,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastScrollTop = 0;
 
   window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollTop = (window.scrollY ?? window.pageYOffset ?? 0);
 
     // Hide mascot if scrolling up very fast, reveal when scrolling down
     // (Optional - right now just keeping it visible and wiggling)
@@ -412,13 +424,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const sections = document.querySelectorAll('.section');
   if (kuroko && sections.length > 0) {
     let kurokoScrollAccumulator = 0;
-    let lastKurokoScroll = window.pageYOffset || document.documentElement.scrollTop;
+    let lastKurokoScroll = (window.scrollY ?? window.pageYOffset ?? 0);
     let kurokoIsPeeking = false;
     let kurokoTimeout;
     let debounceScroll;
 
     window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      const currentScroll = (window.scrollY ?? window.pageYOffset ?? 0);
       const delta = Math.abs(currentScroll - lastKurokoScroll);
       kurokoScrollAccumulator += delta;
       lastKurokoScroll = currentScroll;
@@ -443,8 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = targetSection.getBoundingClientRect();
 
             // Absolute document coordinates calculation
-            const scrollX = window.pageXOffset || document.documentElement.scrollLeft || 0;
-            const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+            const scrollX = window.scrollX ?? window.pageXOffset ?? 0;
+            const scrollY = (window.scrollY ?? window.pageYOffset ?? 0) || 0;
 
             // Pick random direction: 0(left), 1(right), 2(top), 3(bottom)
             // Weight left and right slightly higher for better aesthetics
