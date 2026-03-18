@@ -23,7 +23,7 @@ const TripNotifications = (() => {
 
   const STORAGE_KEY = 'trip_notif_enabled';
   const SENT_KEY = 'trip_notif_sent';
-  let checkInterval = null;
+  let pendingTimers = [];
 
   function isEnabled() {
     return localStorage.getItem(STORAGE_KEY) === 'true';
@@ -65,35 +65,52 @@ const TripNotifications = (() => {
     });
   }
 
-  function checkSchedule() {
+  // Schedule timers only for upcoming notifications (no polling)
+  function scheduleTimers() {
+    clearTimers();
     if (!isEnabled()) return;
-    const now = new Date();
+    const now = Date.now();
     const sent = getSentSet();
 
     for (const item of SCHEDULE) {
       if (sent.has(item.tag)) continue;
       const [month, day, hour, minute] = item.time;
-      const target = new Date(2026, month - 1, day, hour, minute, 0);
-      // Send if we're within the 5-minute window after the scheduled time
-      const diff = now - target;
-      if (diff >= 0 && diff < 5 * 60 * 1000) {
+      const target = new Date(2026, month - 1, day, hour, minute, 0).getTime();
+      const delay = target - now;
+
+      if (delay < -5 * 60 * 1000) {
+        // More than 5 min past — skip
+        continue;
+      }
+
+      if (delay <= 0) {
+        // Within the 5-min window — fire immediately
         sendNotification(item);
         markSent(item.tag);
+        continue;
       }
+
+      // Future — set a single setTimeout
+      const timer = setTimeout(() => {
+        if (!isEnabled()) return;
+        sendNotification(item);
+        markSent(item.tag);
+      }, delay);
+      pendingTimers.push(timer);
     }
+  }
+
+  function clearTimers() {
+    for (const t of pendingTimers) clearTimeout(t);
+    pendingTimers = [];
   }
 
   function start() {
-    if (checkInterval) return;
-    checkSchedule();
-    checkInterval = setInterval(checkSchedule, 30 * 1000); // Check every 30 seconds
+    scheduleTimers();
   }
 
   function stop() {
-    if (checkInterval) {
-      clearInterval(checkInterval);
-      checkInterval = null;
-    }
+    clearTimers();
   }
 
   async function enable() {
