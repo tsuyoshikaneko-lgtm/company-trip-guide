@@ -1189,3 +1189,14 @@ a:hover {
   cursor: not-allowed;
   box-shadow: none;
 }
+
+.ios-hint {
+  background: #fff3e0;
+  border: 2px solid #ffb74d;
+  border-radius: 12px;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  text-align: left;
+  line-height: 1.6;
+}

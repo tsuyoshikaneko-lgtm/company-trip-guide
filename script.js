@@ -126,12 +126,30 @@ const TripNotifications = (() => {
     stop();
   }
 
+  // Re-schedule timers when the app returns to foreground.
+  // Mobile browsers suspend timers in the background, so this ensures
+  // missed notifications fire immediately when the user opens the app.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && isEnabled()) {
+      scheduleTimers();
+    }
+  });
+
   // Auto-start if previously enabled
   if (isEnabled() && 'Notification' in window && Notification.permission === 'granted') {
     start();
   }
 
-  return { enable, disable, isEnabled, requestPermission, SCHEDULE, getSentSet };
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  }
+
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches
+      || navigator.standalone === true;
+  }
+
+  return { enable, disable, isEnabled, requestPermission, isIOS, isStandalone, SCHEDULE, getSentSet };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -139,13 +157,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // Notification Toggle UI
   const notifBtn = document.getElementById('notif-toggle');
   const notifStatus = document.getElementById('notif-status');
+  const notifIOSHint = document.getElementById('notif-ios-hint');
   if (notifBtn) {
+    // Show iOS "Add to Home Screen" hint if needed
+    if (notifIOSHint && TripNotifications.isIOS() && !TripNotifications.isStandalone()) {
+      notifIOSHint.style.display = 'block';
+    }
+
     function updateNotifUI() {
       const enabled = TripNotifications.isEnabled();
       const supported = 'Notification' in window;
       const denied = supported && Notification.permission === 'denied';
 
-      if (denied) {
+      if (!supported) {
+        notifBtn.textContent = '通知に非対応です';
+        notifBtn.disabled = true;
+        notifBtn.classList.remove('active');
+        if (notifStatus) notifStatus.textContent = TripNotifications.isIOS()
+          ? 'ホーム画面に追加してから再度お試しください'
+          : 'このブラウザでは通知を利用できません';
+      } else if (denied) {
         notifBtn.textContent = '通知がブロックされています';
         notifBtn.disabled = true;
         notifBtn.classList.remove('active');
