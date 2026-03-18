@@ -1,11 +1,11 @@
-const CACHE_NAME = 'company-trip-guide-v2';
+const CACHE_NAME = 'company-trip-guide-v8';
 const urlsToCache = [
     './',
     './index.html',
     './style.css',
     './script.js',
     './manifest.json',
-    '/img/icon-192x192.png',
+    './img/icon-192x192.png',
     './img/icon-512x512.png',
     './img/apple-touch-icon.png',
     './img/kuroko.webp',
@@ -37,16 +37,34 @@ self.addEventListener('activate', event => {
     );
 });
 
+// Network-first for HTML/JS/CSS, cache-first for images
 self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                if (response) {
+    const url = new URL(event.request.url);
+    const isAsset = /\.(png|webp|jpg|jpeg|gif|svg|ico|woff2?)$/i.test(url.pathname);
+
+    if (isAsset) {
+        // Cache-first for images/fonts (rarely change)
+        event.respondWith(
+            caches.match(event.request).then(cached => {
+                return cached || fetch(event.request).then(response => {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
                     return response;
-                }
-                return fetch(event.request);
+                });
             })
-    );
+        );
+    } else {
+        // Network-first for HTML/JS/CSS (changes frequently)
+        event.respondWith(
+            fetch(event.request).then(response => {
+                const clone = response.clone();
+                caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+                return response;
+            }).catch(() => {
+                return caches.match(event.request);
+            })
+        );
+    }
 });
 
 // Web Push event from server (Cloudflare Worker)
@@ -62,8 +80,8 @@ self.addEventListener('push', event => {
     event.waitUntil(
         self.registration.showNotification(data.title, {
             body: data.body,
-            icon: '/img/icon-192x192.png',
-            badge: '/img/icon-192x192.png',
+            icon: './img/icon-192x192.png',
+            badge: './img/icon-192x192.png',
             tag: data.tag || 'trip-notification',
             renotify: true,
             vibrate: [200, 100, 200]
@@ -77,8 +95,8 @@ self.addEventListener('message', event => {
         const { title, body, tag } = event.data;
         self.registration.showNotification(title, {
             body: body,
-            icon: '/img/icon-192x192.png',
-            badge: '/img/icon-192x192.png',
+            icon: './img/icon-192x192.png',
+            badge: './img/icon-192x192.png',
             tag: tag,
             renotify: true,
             vibrate: [200, 100, 200]

@@ -3,13 +3,14 @@
 // ============================================
 
 // Worker URL — update after deploying the Cloudflare Worker
-const PUSH_WORKER_URL = 'https://trip-push-worker.YOUR_SUBDOMAIN.workers.dev';
+const PUSH_WORKER_URL = 'https://trip-push-worker.tsuyoshi-kaneko.workers.dev';
 
 // VAPID public key for Web Push subscription
 const VAPID_PUBLIC_KEY = 'BBgq9vZBcOV_b0P44gfsU272Y0n1I9UkL6pGXifwaCDiT-0JiDUHbxYnKCeWi3oecUipfWa4ghZKqsfPZEfw4xc';
 
-// Test mode: ?test-push in URL activates test schedule (notifications in seconds, not real dates)
-const TEST_MODE = new URLSearchParams(window.location.search).has('test-push');
+// Test mode: ?test-push in URL OR sessionStorage flag (set by hidden gesture, session-only)
+let TEST_MODE = new URLSearchParams(window.location.search).has('test-push');
+try { if (sessionStorage.getItem('trip_test_mode') === 'true') TEST_MODE = true; } catch {}
 
 const TripNotifications = (() => {
   // Production schedule: [month, day, hour, minute] in JST
@@ -30,21 +31,14 @@ const TripNotifications = (() => {
     { time: [3, 20, 17, 20], title: 'バスの時間だよ！', body: '17:42発のバスに乗る人、あと20分くらいだよ！19:31に東京着！気をつけて帰ってね！', tag: 'day2-bus' },
   ];
 
-  // Test schedule: fires at 5s, 15s, 30s from now (uses delay instead of absolute time)
-  function buildTestSchedule() {
-    const now = new Date();
-    function offset(seconds) {
-      const t = new Date(now.getTime() + seconds * 1000);
-      return [t.getMonth() + 1, t.getDate(), t.getHours(), t.getMinutes()];
-    }
-    return [
-      { time: offset(5),  title: '[TEST] 集合20分前！', body: 'テスト通知 (5秒後)', tag: 'test-1' },
-      { time: offset(15), title: '[TEST] まもなく昼ごはん', body: 'テスト通知 (15秒後)', tag: 'test-2' },
-      { time: offset(30), title: '[TEST] 全員集合！夕ごはん', body: 'テスト通知 (30秒後)', tag: 'test-3' },
-    ];
-  }
+  // Test schedule: built lazily when enable() is called so offsets are fresh
+  const TEST_ITEMS = [
+    { delaySeconds: 5,  title: '[TEST] 集合20分前！', body: 'テスト通知 (5秒後)', tag: 'test-1' },
+    { delaySeconds: 15, title: '[TEST] まもなく昼ごはん', body: 'テスト通知 (15秒後)', tag: 'test-2' },
+    { delaySeconds: 30, title: '[TEST] 全員集合！夕ごはん', body: 'テスト通知 (30秒後)', tag: 'test-3' },
+  ];
 
-  const SCHEDULE = TEST_MODE ? buildTestSchedule() : PROD_SCHEDULE;
+  const SCHEDULE = TEST_MODE ? [] : PROD_SCHEDULE;
 
   const STORAGE_KEY = TEST_MODE ? 'trip_notif_enabled_test' : 'trip_notif_enabled';
   const SENT_KEY = TEST_MODE ? 'trip_notif_sent_test' : 'trip_notif_sent';
@@ -97,25 +91,70 @@ const TripNotifications = (() => {
     return result === 'granted';
   }
 
+  // Debug log to test panel
+  function debugLog(msg) {
+    console.log('[TripNotif]', msg);
+    if (!TEST_MODE) return;
+    const el = document.getElementById('test-debug-log');
+    if (el) {
+      const ts = new Date().toLocaleTimeString('ja-JP');
+      el.textContent += `[${ts}] ${msg}\n`;
+      el.scrollTop = el.scrollHeight;
+    }
+  }
+
   async function sendNotification(item) {
-    const reg = await navigator.serviceWorker.ready;
-    reg.active.postMessage({
-      type: 'SHOW_NOTIFICATION',
-      title: item.title,
-      body: item.body,
-      tag: item.tag
-    });
+    try {
+      debugLog(`sendNotification: "${item.title}"`);
+      const reg = await navigator.serviceWorker.ready;
+      debugLog(`SW ready, active=${!!reg.active}`);
+      if (!reg.active) {
+        debugLog('ERROR: SW not active');
+        return;
+      }
+      reg.active.postMessage({
+        type: 'SHOW_NOTIFICATION',
+        title: item.title,
+        body: item.body,
+        tag: item.tag
+      });
+      debugLog('postMessage sent OK');
+    } catch (e) {
+      debugLog(`ERROR sendNotification: ${e.message}`);
+    }
   }
 
   // Schedule timers only for upcoming notifications (no polling)
   function scheduleTimers() {
     clearTimers();
     if (!isEnabled()) return;
+
+    if (TEST_MODE) {
+      // Test mode: use direct second-based delays (no minute rounding)
+      const sent = getSentSet();
+      debugLog(`scheduleTimers: ${TEST_ITEMS.length} items, sent=${[...sent].join(',')}`);
+      for (const item of TEST_ITEMS) {
+        if (sent.has(item.tag)) {
+          debugLog(`skip ${item.tag} (already sent)`);
+          continue;
+        }
+        debugLog(`timer set: ${item.tag} in ${item.delaySeconds}s`);
+        const timer = setTimeout(() => {
+          if (!isEnabled()) { debugLog('timer fired but disabled'); return; }
+          debugLog(`timer FIRED: ${item.tag}`);
+          sendNotification(item);
+          markSent(item.tag);
+          updateTestPanel();
+        }, item.delaySeconds * 1000);
+        pendingTimers.push(timer);
+      }
+      return;
+    }
+
     const now = Date.now();
     const sent = getSentSet();
-    // In test mode, use current year; in prod, use 2026
-    const year = TEST_MODE ? new Date().getFullYear() : 2026;
-    const graceWindow = TEST_MODE ? 60 * 1000 : 5 * 60 * 1000;
+    const year = 2026;
+    const graceWindow = 5 * 60 * 1000;
 
     for (const item of SCHEDULE) {
       if (sent.has(item.tag)) continue;
@@ -135,7 +174,6 @@ const TripNotifications = (() => {
         if (!isEnabled()) return;
         sendNotification(item);
         markSent(item.tag);
-        if (TEST_MODE) updateTestPanel();
       }, delay);
       pendingTimers.push(timer);
     }
@@ -165,6 +203,10 @@ const TripNotifications = (() => {
   // Subscribe to Web Push via the Cloudflare Worker
   async function subscribePush() {
     const reg = await navigator.serviceWorker.ready;
+    if (!reg.pushManager) {
+      debugLog('pushManager not available (not PWA or unsupported browser)');
+      return null;
+    }
     let subscription = await reg.pushManager.getSubscription();
     if (!subscription) {
       subscription = await reg.pushManager.subscribe({
@@ -184,6 +226,7 @@ const TripNotifications = (() => {
   // Unsubscribe from Web Push
   async function unsubscribePush() {
     const reg = await navigator.serviceWorker.ready;
+    if (!reg.pushManager) return;
     const subscription = await reg.pushManager.getSubscription();
     if (subscription) {
       // Remove from Worker
@@ -197,14 +240,21 @@ const TripNotifications = (() => {
   }
 
   async function enable() {
+    debugLog('enable() called');
+    debugLog(`Notification API: ${'Notification' in window}`);
+    debugLog(`Permission: ${typeof Notification !== 'undefined' ? Notification.permission : 'N/A'}`);
+    debugLog(`SW support: ${'serviceWorker' in navigator}`);
     const granted = await requestPermission();
+    debugLog(`Permission granted: ${granted}`);
     if (!granted) return false;
     try {
       await subscribePush();
+      debugLog('subscribePush OK');
     } catch (e) {
-      console.warn('Web Push subscription failed, falling back to local timers:', e);
+      debugLog(`subscribePush FAILED: ${e.message}`);
     }
     setEnabled(true);
+    debugLog('enabled=true, calling start()');
     start(); // Local timers as fallback
     return true;
   }
@@ -246,14 +296,15 @@ const TripNotifications = (() => {
     const panel = document.getElementById('test-panel-log');
     if (!panel) return;
     const sent = getSentSet();
-    const lines = SCHEDULE.map(item => {
+    const items = TEST_MODE ? TEST_ITEMS : SCHEDULE;
+    const lines = items.map(item => {
       const done = sent.has(item.tag);
       return `${done ? '[DONE]' : '[WAIT]'} ${item.title}`;
     });
     panel.textContent = lines.join('\n');
   }
 
-  return { enable, disable, isEnabled, requestPermission, isIOS, isStandalone, isTestMode: () => TEST_MODE, SCHEDULE, getSentSet, updateTestPanel };
+  return { enable, disable, isEnabled, requestPermission, isIOS, isStandalone, isTestMode: () => TEST_MODE, SCHEDULE, TEST_ITEMS, getSentSet, updateTestPanel };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -299,8 +350,16 @@ document.addEventListener('DOMContentLoaded', () => {
     notifBtn.addEventListener('click', async () => {
       if (TripNotifications.isEnabled()) {
         await TripNotifications.disable();
+        // Re-show card
+        notifBtn.closest('.notif-card').classList.remove('notif-collapsed');
       } else {
         const ok = await TripNotifications.enable();
+        if (ok) {
+          // Collapse the card after a brief delay so user sees the confirmation
+          setTimeout(() => {
+            notifBtn.closest('.notif-card').classList.add('notif-collapsed');
+          }, 1200);
+        }
         if (!ok && 'Notification' in window && Notification.permission === 'denied') {
           // permission denied
         }
@@ -310,6 +369,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateNotifUI();
+
+    // If already enabled on load, collapse the card immediately (no animation)
+    if (TripNotifications.isEnabled()) {
+      const card = notifBtn.closest('.notif-card');
+      card.style.transition = 'none';
+      card.classList.add('notif-collapsed');
+      // Re-enable transition after layout
+      requestAnimationFrame(() => { card.style.transition = ''; });
+    }
   }
 
   // Test Mode Panel
@@ -326,6 +394,11 @@ document.addEventListener('DOMContentLoaded', () => {
         testWorkerStatus.style.color = 'var(--text-light)';
         try {
           const reg = await navigator.serviceWorker.ready;
+          if (!reg.pushManager) {
+            testWorkerStatus.textContent = 'PWAモード（ホーム画面追加）でのみ利用可能です';
+            testWorkerStatus.style.color = 'var(--accent-red)';
+            return;
+          }
           const subscription = await reg.pushManager.getSubscription();
           if (!subscription) {
             testWorkerStatus.textContent = '先に「通知をオンにする」を押してください';
@@ -507,6 +580,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2500); // Increased visibility time to 2.5 seconds
           }
         }, 150); // wait 150ms after scrolling stops/slows before showing
+      }
+    });
+  }
+
+  // Clean up old localStorage test flag (migrated to sessionStorage)
+  try { localStorage.removeItem('trip_test_mode'); } catch {}
+
+  // Hidden gesture: tap footer bear 5 times to toggle test mode (session-only)
+  const footerBear = document.querySelector('.site-footer img');
+  if (footerBear) {
+    let tapCount = 0;
+    let tapTimer;
+    footerBear.addEventListener('click', (e) => {
+      e.preventDefault();
+      tapCount++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+      if (tapCount >= 5) {
+        tapCount = 0;
+        try {
+          const current = sessionStorage.getItem('trip_test_mode') === 'true';
+          sessionStorage.setItem('trip_test_mode', current ? 'false' : 'true');
+          alert(current ? 'テストモード OFF — リロードします' : 'テストモード ON — リロードします');
+          location.reload();
+        } catch {}
       }
     });
   }

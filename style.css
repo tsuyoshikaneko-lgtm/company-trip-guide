@@ -25,7 +25,7 @@
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -35,7 +35,7 @@ body {
   background-size: var(--notebook-size);
   color: var(--text-dark);
   line-height: 1.7;
-  overflow-x: hidden;
+  overflow-x: clip;
   font-weight: 500;
   /* Add a binder ring effect column on the left */
   border-left: 20px solid #e1d8c1;
@@ -235,6 +235,7 @@ a:hover {
   position: relative;
   z-index: 10;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: clip;
 }
 
 /* Marker Highlights */
@@ -408,7 +409,8 @@ a:hover {
 }
 
 .floating-bear.hide {
-  right: -150px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .bear-img {
@@ -1217,4 +1219,19 @@ a:hover {
 }
 .floating-bear.bear-bounce {
   animation: bearBounce 0.4s ease-out;
+}
+
+/* Notification card collapse after enabling */
+.notif-card {
+  transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.5s ease, margin 0.5s ease, border-width 0.5s ease;
+  max-height: 500px;
+  overflow: hidden;
+}
+.notif-card.notif-collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-width: 0;
 }

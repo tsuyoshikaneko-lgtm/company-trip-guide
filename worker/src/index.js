@@ -247,6 +247,34 @@ export default {
       });
     }
 
+    // POST /test-push-all — send a test push to ALL subscribers (for background testing)
+    if (url.pathname === '/test-push-all' && request.method === 'POST') {
+      const payload = {
+        title: '[TEST] バックグラウンド通知テスト',
+        body: 'Cloudflare Worker からのサーバーPush通知です！',
+      };
+      const list = await env.SUBSCRIPTIONS.list({ prefix: 'sub:' });
+      const results = await Promise.allSettled(
+        list.keys.map(async ({ name }) => {
+          const raw = await env.SUBSCRIPTIONS.get(name);
+          if (!raw) return;
+          const subscription = JSON.parse(raw);
+          const response = await sendPush(subscription, payload, env);
+          if (response.status === 404 || response.status === 410) {
+            await env.SUBSCRIPTIONS.delete(name);
+          }
+          return { status: response.status };
+        })
+      );
+      return new Response(JSON.stringify({
+        ok: true,
+        subscribers: list.keys.length,
+        results: results.map(r => r.status === 'fulfilled' ? r.value : { error: r.reason?.message }),
+      }), {
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
+    }
+
     // GET /health
     if (url.pathname === '/health') {
       return new Response(JSON.stringify({ status: 'ok' }), {
