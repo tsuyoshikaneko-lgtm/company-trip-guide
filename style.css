@@ -187,39 +187,39 @@ a:hover {
 }
 
 .tape::before {
-  left: -4px;
+  left: 0;
   border-left: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
 .tape::after {
-  right: -4px;
+  right: 0;
   border-right: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
 .tape-1 {
-  top: -15px;
-  right: -30px;
+  top: -10px;
+  right: -15px;
   transform: rotate(15deg);
   background: rgba(255, 207, 51, 0.6);
 }
 
 .tape-2 {
-  bottom: -15px;
-  left: -20px;
+  bottom: -10px;
+  left: -10px;
   transform: rotate(-10deg);
   background: rgba(77, 166, 255, 0.6);
 }
 
 .tape-3 {
-  top: -15px;
-  left: -20px;
+  top: -10px;
+  left: -10px;
   transform: rotate(-15deg);
   background: rgba(255, 94, 94, 0.6);
 }
 
 .tape-4 {
   top: 50%;
-  right: -25px;
+  right: -10px;
   transform: rotate(8deg);
   background: rgba(56, 217, 169, 0.6);
   width: 80px;
@@ -235,7 +235,6 @@ a:hover {
   position: relative;
   z-index: 10;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  overflow: clip;
 }
 
 /* Marker Highlights */
@@ -459,6 +458,8 @@ a:hover {
   padding: 20px;
   margin-bottom: 20px;
   transition: transform 0.2s;
+  position: relative;
+  overflow: hidden;
 }
 
 .card:hover {
@@ -1234,4 +1235,11 @@ a:hover {
   padding-bottom: 0;
   margin-bottom: 0;
   border-width: 0;
+}
+
+/* Hide notification card on non-touch devices (PC) */
+@media (hover: hover) and (pointer: fine) {
+  .notif-card {
+    display: none;
+  }
 }

@@ -16,9 +16,9 @@ const TripNotifications = (() => {
   // Production schedule: [month, day, hour, minute] in JST
   const PROD_SCHEDULE = [
     // === Day 1: 3/19 (Thu) ===
-    { time: [3, 19, 10, 30], title: 'おーい！あと20分だよ！', body: 'くまさんだよ！東京駅バス乗り場に10:50集合！寝坊してないよね？遅刻だけはダメだからね！', tag: 'day1-assembly' },
+    { time: [3, 19, 10, 30], title: 'おーい！あと20分だよ！', body: 'くまさんだよ！バス組は東京駅に10:50集合！現地組は12:40にワーズワースで待ってるよ！遅刻だけはダメだからね！', tag: 'day1-assembly' },
     { time: [3, 19, 12, 30], title: 'お腹すいたー！ごはん！', body: 'もうすぐイタリアンだよ！12:40〜ワーズワースに全員集合！くまさんの分も食べてきてね…', tag: 'day1-lunch' },
-    { time: [3, 19, 14, 55], title: 'ホテルに行こう！', body: '15:00からチェックインできるよ！17:15までにKAGURAへGO！荷物おろしてゆっくりしてね', tag: 'day1-checkin' },
+    { time: [3, 19, 14, 55], title: 'そろそろホテルだよ〜！', body: '15:00からチェックインできるよ！17:15までにKAGURAへGO！荷物おろしてゆっくりしてね〜', tag: 'day1-checkin' },
     { time: [3, 19, 15, 45], title: 'そろそろ自由行動の時間！', body: '申し込んだ人は和菓子作り体験が16:00〜岩立本店ではじまるよ！それ以外の人はまったり過ごしてね', tag: 'day1-wagashi' },
     { time: [3, 19, 17, 15], title: 'ぜったい来てね！夕ごはん！', body: '17:30〜ホテルで夕食だよ！立澤さんも一緒！みんなで楽しく食べよう！くまさんは山でどんぐり食べてるよ…', tag: 'day1-dinner' },
 
@@ -28,7 +28,7 @@ const TripNotifications = (() => {
     { time: [3, 20, 11, 45], title: 'そろそろお片付け！', body: '12:00チェックアウトだよ！忘れ物ないかな？荷物はホテルに預けられるから安心してね', tag: 'day2-checkout' },
     { time: [3, 20, 13, 45], title: '午後の時間だよ！', body: '申し込んだ人はアクティビティが14:00〜はじまるよ！自由に過ごす人も佐原を楽しんでね', tag: 'day2-activity1' },
     { time: [3, 20, 15, 50], title: 'みんなで振り返り！', body: '16:00〜いなえで中締めだよ！参加できる人はぜひ！楽しかった思い出をみんなで語ろう', tag: 'day2-closing' },
-    { time: [3, 20, 17, 20], title: 'バスの時間だよ！', body: '17:42発のバスに乗る人、あと20分くらいだよ！19:31に東京着！気をつけて帰ってね！', tag: 'day2-bus' },
+    { time: [3, 20, 17, 20], title: 'おつかれさま！楽しかったね！', body: 'くまさんからありがとう！みんなと過ごせて最高だったよ！バス組は17:42発だから気をつけて帰ってね！', tag: 'day2-bus' },
   ];
 
   // Test schedule: built lazily when enable() is called so offsets are fresh
@@ -93,8 +93,8 @@ const TripNotifications = (() => {
 
   // Debug log to test panel
   function debugLog(msg) {
-    console.log('[TripNotif]', msg);
     if (!TEST_MODE) return;
+    console.log('[TripNotif]', msg);
     const el = document.getElementById('test-debug-log');
     if (el) {
       const ts = new Date().toLocaleTimeString('ja-JP');
